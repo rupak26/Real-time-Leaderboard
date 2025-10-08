@@ -24,7 +24,16 @@ func NewLaderbordRepo(db *sqlx.DB) LaderRepo {
 
 
 func (r *ladrRepo) Create(scr domain.SubmitScore) (*domain.SubmitScore, error) {
-     
+     query := `
+		INSERT INTO scores (
+			game_id,
+			score
+		) VALUES (
+			:game_id,
+			:score
+		)
+		RETURNING id;
+    `
 }
 func (r *ladrRepo) GetIndividulScore(userId int) (*domain.UserRanking, error) {
 
