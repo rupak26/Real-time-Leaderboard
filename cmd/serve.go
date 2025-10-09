@@ -2,9 +2,17 @@ package cmd
 
 import (
 	"fmt"
-    "os"
+	"os"
+
 	"github.com/rupak26/Real-time-Leaderboard/config"
 	"github.com/rupak26/Real-time-Leaderboard/infra/db"
+	"github.com/rupak26/Real-time-Leaderboard/internal/handler/laderbord_handler"
+	"github.com/rupak26/Real-time-Leaderboard/internal/handler/user_handler"
+	"github.com/rupak26/Real-time-Leaderboard/internal/middleware"
+	"github.com/rupak26/Real-time-Leaderboard/laderbord"
+	"github.com/rupak26/Real-time-Leaderboard/repository"
+	"github.com/rupak26/Real-time-Leaderboard/users"
+	"github.com/rupak26/Real-time-Leaderboard/internal/handler"
 )
 
 func Server() {
@@ -22,4 +30,18 @@ func Server() {
 		os.Exit(1)
 	}
 	
+	laderRepo := repository.NewLaderbordRepo(dbCon)
+	userRepo := repository.NewUserRepo(dbCon)
+   
+    //domains
+    usrSvc := users.NewService(userRepo)
+    laderSvc := laderbord.NewService(laderRepo)
+
+	middleware := middleware.NewMiddleware(cnf)
+	
+    laderBordHandler := laderbord_handler.NewHandler(middleware , laderSvc)
+	userHandler := user_handler.NewHandler(usrSvc)
+
+    server := handler.NewServer(cnf , laderBordHandler , userHandler)
+	server.Start()
 }

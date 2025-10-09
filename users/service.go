@@ -15,14 +15,7 @@ func NewService(usrRepo UserRepo) Service {
 }
 
 func (svc *service) Create(user domain.User) (*domain.User, error) {
-	usr , err := svc.usrRepo.Create(user)
-	if err != nil {
-		return nil , err
-	}
-	if usr == nil {
-		return nil , nil
-	}
-	return usr , nil 
+	return  svc.usrRepo.Create(user)
 }
 
 func (svc *service) Find(email string , password string) (*domain.User , error) {

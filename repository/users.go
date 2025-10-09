@@ -1,9 +1,11 @@
 package repository
 
 import (
-	"github.com/rupak26/Real-time-Leaderboard/domain"
-	"github.com/rupak26/Real-time-Leaderboard/users"	
+
+
 	"github.com/jmoiron/sqlx"
+	"github.com/rupak26/Real-time-Leaderboard/domain"
+	"github.com/rupak26/Real-time-Leaderboard/users"
 )
 
 type UserRepo interface {
@@ -26,15 +28,16 @@ func NewUserRepo(db *sqlx.DB) UserRepo {
 }
 
 func (r *userRepo) Create(usr domain.User) (*domain.User , error) {
+	
     query := `
 		INSERT INTO users (
 		  username, 
 		  email, 
-		  password, 
+		  password
 		) VALUES (
 		  :username , 
 		  :email , 
-		  :password ,
+		  :password 
 		)
 		RETURNING id;
 	`

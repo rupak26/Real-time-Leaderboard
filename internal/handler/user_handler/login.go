@@ -2,14 +2,15 @@ package user_handler
 
 import (
 	"github.com/rupak26/Real-time-Leaderboard/config"
-//	"github.com/rupak26/Real-time-Leaderboard/domain"
-	"github.com/rupak26/Real-time-Leaderboard/utils"
+	//	"github.com/rupak26/Real-time-Leaderboard/domain"
 	"encoding/json"
 	"net/http"
+
+	"github.com/rupak26/Real-time-Leaderboard/utils"
 )
 
 type ReqLogin struct {
-	Email string      `json:"email"`
+	Email    string   `json:"email"`
 	Password string   `json:"password"`
 }
 
@@ -25,10 +26,11 @@ type ApiResponse struct {
 func (h *Handler) Login(w http.ResponseWriter , r *http.Request) {
 	
 	var reqLogin ReqLogin
-
+    
 	decoder := json.NewDecoder(r.Body) 
 	err := decoder.Decode(&reqLogin) 
-    key := config.GetConfig().SecretKey
+   
+	key := config.GetConfig().SecretKey
 
 	if err != nil {
 		http.Error(w,"Invalid Request Data" , http.StatusBadRequest)
@@ -43,6 +45,7 @@ func (h *Handler) Login(w http.ResponseWriter , r *http.Request) {
 
 	jwt , err := utils.CreateJwt(key , utils.Payload{
 		Sub: 1,
+		User_Id: user.ID,
 		Email: user.Email,
 		Password: reqLogin.Password,
 	})

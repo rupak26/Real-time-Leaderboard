@@ -1,10 +1,12 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 	"crypto/hmac"
 	"crypto/sha256"
 	"strings"
+	"encoding/json"
 	"github.com/rupak26/Real-time-Leaderboard/utils"
 )
 
@@ -64,7 +66,30 @@ func (m *Middlewares) Authorization(next http.Handler) http.Handler {
 			http.Error(w , "Unauthorized" , http.StatusUnauthorized) 
 			return 	
 		}
-    
+        
+		payloadBytes, err := utils.Base64UrlDecode(jwtPayload)
+		if err != nil {
+			http.Error(w, "Invalid token payload", http.StatusUnauthorized)
+			return
+		}
+
+		var claims map[string]interface{}
+		if err := json.Unmarshal(payloadBytes, &claims); err != nil {
+			http.Error(w, "Invalid token claims", http.StatusUnauthorized)
+			return
+		}
+
+		userID, ok := claims["user_id"].(float64)
+		if !ok {
+			http.Error(w, "Invalid or missing user_id in token", http.StatusUnauthorized)
+			return
+		}
+
+		// ✅ Put user_id in context
+		ctx := context.WithValue(r.Context(), "user_id", int(userID))
+		r = r.WithContext(ctx)
+
+
 		next.ServeHTTP(w , r)
 	})
 }

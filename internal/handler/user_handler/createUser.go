@@ -9,7 +9,7 @@ import (
 )
 
 type CreateUserReq struct {
-	UserName string         `json:"username"`
+	UserName string     `json:"username"`
 	Email string        `json:"email"`
 	Password string     `json:"password"`
 }
@@ -25,7 +25,7 @@ func (h *Handler) CreateUser(w http.ResponseWriter , r *http.Request) {
 		fmt.Fprintln(w,"Give a valid json") 
 		return 
 	}
-    
+	
 	createUser , err := h.svc.Create(domain.User{
 		UserName: newUser.UserName,
 		Email: newUser.Email,

@@ -17,12 +17,12 @@ func GetConnectionString(cnf *config.DBConfig) string {
 	 if !cnf.EnableSSLMODE {
 		connString += " sslmode=disable"
 	 }
-	 fmt.Println(connString)
      return connString
 }
 
 func NewConnection(cnf *config.DBConfig) (*sqlx.DB , error) {
     dbSource := GetConnectionString(cnf)
+	
 	db , err := sqlx.Connect("postgres" , dbSource)
     
 	if err != nil {

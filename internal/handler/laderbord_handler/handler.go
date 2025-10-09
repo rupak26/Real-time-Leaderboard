@@ -8,7 +8,7 @@ type Handler struct {
 	svc Service
 }
 
-func NewHandler( svc Service , middlewares *middleware.Middlewares,) *Handler {
+func NewHandler( middlewares *middleware.Middlewares, svc Service , ) *Handler {
 	return &Handler{
 		middleware: middlewares,
 		svc: svc,

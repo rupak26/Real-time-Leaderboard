@@ -13,9 +13,10 @@ type Header struct {
 }
 
 type Payload struct {
-	Sub  int    `json:"sub"`
-	Email string   `json:"email"` 
-    Password string    `json:"password"`
+	Sub        int         `json:"sub"`
+	User_Id    int         `json:"user_id"`
+	Email      string      `json:"email"` 
+    Password   string      `json:"password"`
 }
 
 func CreateJwt(secret string ,  data Payload) (string , error) {
@@ -58,4 +59,11 @@ func CreateJwt(secret string ,  data Payload) (string , error) {
 
 func Base64UrlEncode(data []byte) string {
 	return base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString(data)
+}
+func Base64UrlDecode(s string) ([]byte, error) {
+	decoded, err := base64.URLEncoding.WithPadding(base64.NoPadding).DecodeString(s)
+	if err != nil {
+		return nil, err
+	}
+	return decoded, nil
 }

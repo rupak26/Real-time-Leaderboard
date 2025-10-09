@@ -2,9 +2,10 @@ package domain
 
 
 type SubmitScore struct {
-	Id       int    `json:"id"`
-	GameId   string `json:"game_id"`
-	Score    int64  `json:"score"`
+	Id       int    `db:"id"      json:"id"`
+	UserId   int    `db:"user_id" json:"user_id"`
+	GameId   string `db:"game_id" json:"game_id"`
+	Score    int64  `db:"score"   json:"score"`
 }
 
 type UserRanking struct {
