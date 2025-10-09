@@ -1,0 +1,19 @@
+// query := `
+	// 	SELECT username, score, rank
+	// 	FROM (
+	// 		SELECT 
+	// 			u.username,
+	// 			l.user_id,
+	// 			l.score,
+	// 			RANK() OVER (ORDER BY l.score DESC) AS rank
+	// 		FROM leaderboard l
+	// 		JOIN users u ON u.id = l.user_id
+	// 	) ranked
+	// 	WHERE ranked.user_id = $1;
+	// `
+
+query := `
+		INSERT INTO leaderboard (user_id, game_id, score)
+		VALUES ($1, $2, $3)
+		RETURNING id, user_id, game_id, score
+	`

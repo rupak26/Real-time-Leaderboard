@@ -79,14 +79,14 @@ func (m *Middlewares) Authorization(next http.Handler) http.Handler {
 			return
 		}
 
-		userID, ok := claims["user_id"].(float64)
+		userName, ok := claims["user_name"]
 		if !ok {
 			http.Error(w, "Invalid or missing user_id in token", http.StatusUnauthorized)
 			return
 		}
 
 		// ✅ Put user_id in context
-		ctx := context.WithValue(r.Context(), "user_id", int(userID))
+		ctx := context.WithValue(r.Context(), "user_name", userName)
 		r = r.WithContext(ctx)
 
 

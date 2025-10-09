@@ -14,7 +14,7 @@ type Header struct {
 
 type Payload struct {
 	Sub        int         `json:"sub"`
-	User_Id    int         `json:"user_id"`
+	UserName  string      `json:"user_name"`
 	Email      string      `json:"email"` 
     Password   string      `json:"password"`
 }

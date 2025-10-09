@@ -8,6 +8,12 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type RedisConfig struct {
+	Addr        string
+	Password    string
+	RedisDb     int64
+}
+
 type DBConfig struct {
 	Host          string
 	Port          int
@@ -23,6 +29,7 @@ type Config struct {
 	HttpPort       int64
 	SecretKey      string
 	DB            *DBConfig
+	RedisCon      *RedisConfig
 }
 
 var configuration *Config
@@ -107,7 +114,19 @@ func loadConfig() {
 		fmt.Println("Invalid Enalbel SSL Mode")
 		os.Exit(1)
 	}
+
+	redisAddr := os.Getenv("REDIS_ADDR")
+	redisPass := os.Getenv("REDIS_PASSWORD")
+
+	redisDb   := os.Getenv("REDIS_DB")
    
+    redisPrt , _ := strconv.ParseInt(redisDb , 10 , 64)
+    
+    redisConfig := &RedisConfig{
+		Addr: redisAddr,
+		Password: redisPass,
+		RedisDb: redisPrt,
+	}
     dbConfig := &DBConfig{
 		Host: dbhost,
 		Port: int(dbPrt),
@@ -123,6 +142,7 @@ func loadConfig() {
 		HttpPort: port,
 		SecretKey: jwtSecretkey,
 		DB:        dbConfig,
+		RedisCon:  redisConfig,
 	}
 }
 

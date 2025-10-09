@@ -29,8 +29,8 @@ func Server() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	
-	laderRepo := repository.NewLaderbordRepo(dbCon)
+	rdb := db.InitRedis(*cnf.RedisCon)
+	laderRepo := repository.NewLaderbordRepo(rdb)
 	userRepo := repository.NewUserRepo(dbCon)
    
     //domains

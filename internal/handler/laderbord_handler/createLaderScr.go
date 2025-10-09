@@ -19,7 +19,7 @@ func (h *Handler) CreateLaderScr( w http.ResponseWriter , r *http.Request ){
 	decoder := json.NewDecoder(r.Body) 
 	err := decoder.Decode(&req) 
 
-    usr_id := r.Context().Value("user_id").(int)
+    usr_name := r.Context().Value("user_name").(string)
     
 	
 	if err != nil {
@@ -27,7 +27,7 @@ func (h *Handler) CreateLaderScr( w http.ResponseWriter , r *http.Request ){
 		return 
 	}
 	createLaderScr , err := h.svc.Create(domain.SubmitScore{
-		UserId: usr_id,
+		UserName: usr_name,
 		GameId: req.GameId,
 		Score : req.Score,
 	})

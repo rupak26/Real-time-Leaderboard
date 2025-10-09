@@ -11,8 +11,8 @@ type Service interface{
 
 type LaderbordRepo interface {
     Create(scr domain.SubmitScore)   (*domain.SubmitScore , error) 
-	GetScoreList(page , limit int64) (*[]domain.UserRanking , error)
-	GetIndividulScore(userId int)    (*domain.UserRanking , error)
+	GetScoreList(limit int64) (*[]domain.UserRanking , error)
+	GetIndividulScore(userId int)    (int64 , error)
 }
 
 

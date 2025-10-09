@@ -1,9 +1,12 @@
 package repository
 
 import (
-	"github.com/jmoiron/sqlx"
+	"fmt"
+	"context"
 	"github.com/rupak26/Real-time-Leaderboard/domain"
 	"github.com/rupak26/Real-time-Leaderboard/laderbord"
+	"github.com/redis/go-redis/v9"
+	"strconv"
 )
 
 type LaderRepo interface {
@@ -11,75 +14,73 @@ type LaderRepo interface {
 }
 
 type ladrRepo struct {
-    db *sqlx.DB
+	rdb *redis.Client
+	ctx context.Context
+	key string
 }
 
 
-func NewLaderbordRepo(db *sqlx.DB) LaderRepo {
+func NewLaderbordRepo(rdb *redis.Client) LaderRepo {
      repo := &ladrRepo{
-		db : db ,
+		rdb: rdb,
+		ctx: context.Background(),
+		key: "leaderboard",
 	 }
 	 return repo
 }
 
 
 func (r *ladrRepo) Create(scr domain.SubmitScore) (*domain.SubmitScore, error) {
-	query := `
-		INSERT INTO leaderboard (user_id, game_id, score)
-		VALUES ($1, $2, $3)
-		RETURNING id, user_id, game_id, score
-	`
 
-	var result domain.SubmitScore
-
-	if err := r.db.QueryRowx(query, scr.UserId, scr.GameId, scr.Score).
-		StructScan(&result); err != nil {
-		return nil, err
-	}
-
-	return &result, nil
-}
-
-
-func (r *ladrRepo) GetIndividulScore(userId int) (*domain.UserRanking, error) {
-    var userRank domain.UserRanking
-	
-	query := `
-		SELECT username, score, rank
-		FROM (
-			SELECT 
-				u.username,
-				l.user_id,
-				l.score,
-				RANK() OVER (ORDER BY l.score DESC) AS rank
-			FROM leaderboard l
-			JOIN users u ON u.id = l.user_id
-		) ranked
-		WHERE ranked.user_id = $1;
-	`
-	err := r.db.Get(&userRank, query , userId) 
+	err := r.rdb.ZAdd(r.ctx, r.key, redis.Z{
+		Score:  float64(scr.Score),
+		Member: fmt.Sprintf("%s:%s", scr.UserName, scr.GameId), 
+	}).Err()
 	if err != nil {
 		return nil, err
 	}
+
+	return &scr, nil
+}
+
+
+func (r *ladrRepo) GetIndividulScore(userId int) (int64 , error) {
+    var username string
+	err := r.db.Get(&username, "SELECT username FROM users WHERE id = $1", userId)
+	if err != nil {
+		return 0, fmt.Errorf("failed to fetch username: %w", err)
+	}
+
+	// 2️⃣ Fetch game_id from leaderboard table
+	var gameId int
+	err = r.db.Get(&gameId, "SELECT game_id FROM leaderboard WHERE user_id = $1", userId)
+	if err != nil {
+		return 0, fmt.Errorf("failed to fetch game_id: %w", err)
+	}
+	 
+
+	 rank , err := r.rdb.ZRank(r.ctx , r.key , "jhon:cricket__1").Result()
+	 if err != nil {
+		return 0, err
+	 }
+	 fmt.Println(userid)
+     return rank, nil
+}
+
+func (r *ladrRepo) GetScoreList(limit int64) (*[]domain.UserRanking, error) {
+	var userRank []domain.UserRanking
+
+	allrec, err := r.rdb.ZRevRangeWithScores(r.ctx, r.key, 0, limit-1).Result()
+	if err != nil {
+		return nil, err
+	}
+	for i, rec := range allrec {
+		userRank = append(userRank, domain.UserRanking{
+			UserName: rec.Member.(string), 
+			Score:    rec.Score,
+			Rank:     int64(i + 1), // rank starts at 1
+		})
+	}
+
 	return &userRank, nil
-}
-
-func (r *ladrRepo) GetScoreList(page int64, limit int64) (*[]domain.UserRanking, error) {
-    var scores []domain.UserRanking
-	offset := (page - 1) * limit
-	query := `
-		SELECT 
-			u.username,
-			l.score,
-			RANK() OVER (ORDER BY l.score DESC) AS rank
-		FROM leaderboard l
-		JOIN users u ON u.id = l.user_id
-		ORDER BY rank
-		LIMIT $1 OFFSET $2;
-	`
-	err := r.db.Select(&scores, query , limit , offset)
-	if err != nil {
-		return nil, err
-	}
-	return &scores, nil
 }

@@ -10,16 +10,14 @@ type PaginatedData struct {
 }
 
 type Pagination struct {
-	Page       int64             `json:"page"`
 	Limit      int64             `json:"limit"`
 } 
 
 
-func SendPage(w http.ResponseWriter , data any  , page , limit int64)  {
+func SendPage(w http.ResponseWriter , data any  , limit int64)  {
      paginatedData := PaginatedData{
 		DataList: data,
 		Pagination: Pagination{
-			Page: page,
 			Limit: limit,
 		},
 	 }
