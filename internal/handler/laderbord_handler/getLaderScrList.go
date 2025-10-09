@@ -1,9 +1,11 @@
 package laderbord_handler
 
 import (
-        "net/http"
-		"strconv"
-		"github.com/rupak26/Real-time-Leaderboard/utils"
+
+	"net/http"
+	"strconv"
+
+	"github.com/rupak26/Real-time-Leaderboard/utils"
 )
 
 
@@ -21,8 +23,9 @@ func (h *Handler) GetLaderScrList (w http.ResponseWriter , r *http.Request) {
 	}
     laderList , err := h.svc.GetScoreList(pg , lmt) 
 	if err != nil {
-       http.Error(w , "Internal Server Error" ,http.StatusInternalServerError)
+       utils.WriteResponse(w ,http.StatusInternalServerError , "Internal Server Error" )
+	   return
 	}
-   
+     
     utils.SendPage(w , laderList , pg , lmt)
 }

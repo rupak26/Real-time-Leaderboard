@@ -9,8 +9,8 @@ type SubmitScore struct {
 }
 
 type UserRanking struct {
-	ID        int    `json:"id"`
     UserName  string `json:"user_name"`
 	Score     int64  `json:"score"`
 	Rank      int64  `json:"rank"`
 }
+

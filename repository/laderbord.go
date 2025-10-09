@@ -42,19 +42,42 @@ func (r *ladrRepo) Create(scr domain.SubmitScore) (*domain.SubmitScore, error) {
 
 
 func (r *ladrRepo) GetIndividulScore(userId int) (*domain.UserRanking, error) {
-    var score domain.UserRanking
-	query := `SELECT * FROM leaderboard WHERE user_id = $1`
-	err := r.db.Get(&score, query, userId) 
+    var userRank domain.UserRanking
+	
+	query := `
+		SELECT username, score, rank
+		FROM (
+			SELECT 
+				u.username,
+				l.user_id,
+				l.score,
+				RANK() OVER (ORDER BY l.score DESC) AS rank
+			FROM leaderboard l
+			JOIN users u ON u.id = l.user_id
+		) ranked
+		WHERE ranked.user_id = $1;
+	`
+	err := r.db.Get(&userRank, query , userId) 
 	if err != nil {
 		return nil, err
 	}
-	return &score, nil
+	return &userRank, nil
 }
 
 func (r *ladrRepo) GetScoreList(page int64, limit int64) (*[]domain.UserRanking, error) {
     var scores []domain.UserRanking
-	query := `SELECT * FROM leaderboard`
-	err := r.db.Select(&scores, query)
+	offset := (page - 1) * limit
+	query := `
+		SELECT 
+			u.username,
+			l.score,
+			RANK() OVER (ORDER BY l.score DESC) AS rank
+		FROM leaderboard l
+		JOIN users u ON u.id = l.user_id
+		ORDER BY rank
+		LIMIT $1 OFFSET $2;
+	`
+	err := r.db.Select(&scores, query , limit , offset)
 	if err != nil {
 		return nil, err
 	}

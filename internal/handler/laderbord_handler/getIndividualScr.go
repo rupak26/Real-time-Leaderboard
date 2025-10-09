@@ -18,7 +18,7 @@ func (h *Handler) GetIndividualLaderScr(w http.ResponseWriter , r *http.Request)
 
 	scr , err := h.svc.GetIndividulScore(scrId)
 	if err != nil {
-		utils.Send_erros(w , "Product not found" , http.StatusNotFound)
+		utils.Send_erros(w , "Scores not found" , http.StatusNotFound)
 		return
 	}
 	utils.WriteResponse(w , http.StatusOK , scr)
