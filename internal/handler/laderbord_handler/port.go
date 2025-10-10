@@ -7,5 +7,5 @@ import (
 type Service interface{
      Create(scr domain.SubmitScore)   (*domain.SubmitScore , error) 
 	 GetScoreList(limit int64) (*[]domain.UserRanking , error)
-	 GetIndividulScore(userId int) (int64, error)
+	 GetIndividulScore(userId int) (*domain.UserRanking, error)
 }

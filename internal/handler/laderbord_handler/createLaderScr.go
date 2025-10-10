@@ -20,13 +20,15 @@ func (h *Handler) CreateLaderScr( w http.ResponseWriter , r *http.Request ){
 	err := decoder.Decode(&req) 
 
     usr_name := r.Context().Value("user_name").(string)
-    
+    user_id  := r.Context().Value("user_id").(int)
+	
 	
 	if err != nil {
 		fmt.Fprintln(w,"Give a valid json") 	
 		return 
 	}
 	createLaderScr , err := h.svc.Create(domain.SubmitScore{
+		UserId: user_id,
 		UserName: usr_name,
 		GameId: req.GameId,
 		Score : req.Score,

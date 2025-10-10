@@ -17,7 +17,7 @@ func NewService(ladrrepo LaderbordRepo) Service {
 func (svc *service) Create(scr domain.SubmitScore) (*domain.SubmitScore, error) {
 	 return svc.ladrrepo.Create(scr)
 }
-func (svc *service) GetIndividulScore(userId int) (int64, error) {
+func (svc *service) GetIndividulScore(userId int) (*domain.UserRanking, error) {
 	 return svc.ladrrepo.GetIndividulScore(userId)
 }
 func (svc *service) GetScoreList(limit int64) (*[]domain.UserRanking, error) {

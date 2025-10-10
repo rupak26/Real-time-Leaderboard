@@ -78,17 +78,27 @@ func (m *Middlewares) Authorization(next http.Handler) http.Handler {
 			http.Error(w, "Invalid token claims", http.StatusUnauthorized)
 			return
 		}
+        
+        userIdFloat , okk := claims["user_id"].(float64) 
 
-		userName, ok := claims["user_name"]
-		if !ok {
+		if !okk {
 			http.Error(w, "Invalid or missing user_id in token", http.StatusUnauthorized)
 			return
 		}
+        userId := int(userIdFloat)
+		userName, ok := claims["user_name"]
+		if !ok {
+			http.Error(w, "Invalid or missing user_name in token", http.StatusUnauthorized)
+			return
+		}
+
+		
 
 		// ✅ Put user_id in context
-		ctx := context.WithValue(r.Context(), "user_name", userName)
-		r = r.WithContext(ctx)
+		ctx := context.WithValue(r.Context(), "user_id", userId) 
+		ctx = context.WithValue(ctx, "user_name", userName)
 
+		r = r.WithContext(ctx)
 
 		next.ServeHTTP(w , r)
 	})

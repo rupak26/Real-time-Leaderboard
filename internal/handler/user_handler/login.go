@@ -45,6 +45,7 @@ func (h *Handler) Login(w http.ResponseWriter , r *http.Request) {
 
 	jwt , err := utils.CreateJwt(key , utils.Payload{
 		Sub: 1,
+		UserId: user.ID,
 		UserName: user.UserName,
 		Email: user.Email,
 		Password: reqLogin.Password,
