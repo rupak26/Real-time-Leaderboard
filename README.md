@@ -1,20 +1,29 @@
 # Real-time Leaderboard
 
-A project to implement a real-time leaderboard system, allowing users to view and update rankings instantly.
+This is a real-time leaderboard system built in Go using Redis and PostgreSQL. The application allows users to register, submit scores, and view leaderboards in real-time, with scores being stored in Redis sorted sets.
 
 ## Features
 
-- Live updates of leaderboard positions
-- User score submissions
-- Responsive UI
-- Backend integration for persistent data
+- User Authentication (using JWT)
+- Submit Scores for various games/activities
+- Real-time Leaderboard Updates
+- View Global Leaderboard
+- View User's Rank on Leaderboard
+- Automatic Database Migrations on Startup
 
 ## Technologies Used
 
-- Frontend: React
 - Backend:  Golang
-- Database: PostgreSQL
-- Real-time: WebSockets
+- Database: PostgreSQL and Redis (Sorted Set)
+- Real-time: Redis
+- go-redis package for Redis connection
+- go-sqlx  package for PostgreSQL
+
+## This is Roadmap.sh Project solution in Golang Roadmap
+   ```bash
+   https://roadmap.sh/projects/realtime-leaderboard-system
+   ```
+
 
 ## Setup
 
@@ -25,12 +34,41 @@ A project to implement a real-time leaderboard system, allowing users to view an
 2. Install dependencies:
     ```bash
     cd Real-time Leaderboard
-    npm install
+    
+    Create a .env file in the root of the project with the following content:
+        VERSION = 1.0.0 
+        SERVICE_NAME = REAL-TIME-LADERBORD 
+        HTTP_PORT = 8080
+
+        DB_HOST=localhost
+        DB_PORT=5432
+        DB_USER=postgres
+        DB_PASSWORD=12345678
+        DB_NAME=Real_Time_LaderBoard
+        ENABLE_SSL_MODE = false
+
+
+
+        # DB_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=${ENABLE_SSL_MODE}
+
+
+        JWT_SECRET="a4bc166839d6ff3c83eb9d1cbb0ddda2a65f74eeea9a07413357200dfad1d808d708e7d5"
+
+
+        REDIS_ADDR=localhost:6379
+        REDIS_PASSWORD=""
+        REDIS_DB=0
     ```
+
+4. Install Dependencies 
+   ```
+      go mod download
+   ```
 3. Start the development server:
     ```bash
     go run main.go
     ```
+
 
 ## Usage
 
