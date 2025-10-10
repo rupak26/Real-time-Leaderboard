@@ -43,8 +43,8 @@ This is a real-time leaderboard system built in Go using Redis and PostgreSQL. T
         DB_HOST=localhost
         DB_PORT=5432
         DB_USER=postgres
-        DB_PASSWORD=12345678
-        DB_NAME=Real_Time_LaderBoard
+        DB_PASSWORD="your_db_password"
+        DB_NAME="your_db_name"
         ENABLE_SSL_MODE = false
 
 
@@ -52,7 +52,7 @@ This is a real-time leaderboard system built in Go using Redis and PostgreSQL. T
         # DB_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=${ENABLE_SSL_MODE}
 
 
-        JWT_SECRET="a4bc166839d6ff3c83eb9d1cbb0ddda2a65f74eeea9a07413357200dfad1d808d708e7d5"
+        JWT_SECRET="my_secret_key"
 
 
         REDIS_ADDR=localhost:6379
