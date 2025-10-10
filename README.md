@@ -21,7 +21,7 @@ This is a real-time leaderboard system built in Go using Redis and PostgreSQL. T
 
 ## This is Roadmap.sh Project solution in Golang Roadmap
    ```bash
-   https://roadmap.sh/projects/realtime-leaderboard-system
+       https://roadmap.sh/projects/realtime-leaderboard-system
    ```
 
 
@@ -69,7 +69,19 @@ This is a real-time leaderboard system built in Go using Redis and PostgreSQL. T
     go run main.go
     ```
 
+## API Endpoints
 
+1. Register User 
+   POST users/
+
+   Request:
+   ```
+      {
+        "username" : "jhon" , 
+        "email" : "jhon@gmail.com" ,
+        "password" : "1234"
+      }
+   ```
 ## Usage
 
 - Access the leaderboard via the web interface.
