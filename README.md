@@ -82,11 +82,63 @@ This is a real-time leaderboard system built in Go using Redis and PostgreSQL. T
         "password" : "1234"
       }
    ```
-## Usage
+2. Login User
+   POST users/login/
 
-- Access the leaderboard via the web interface.
-- Submit scores to see instant updates.
-- Rankings update in real-time for all users.
+   Request:
+   ```
+      {      
+        "email": "jhon@gmail.com",
+        "password": "1234"
+      }
+   ```
+   Response (Success):
+   ```
+       {
+         "status": 201,
+         "message": "Access Token",
+         "data": "your_jwt_token_here"
+       }
+   ```
+3. Submit Score
+   POST /submit-score
+
+   Request:
+   ```
+      {
+        "game_id" : "cricket__12" ,
+        "score"   :  1600
+      }
+   ``` 
+
+4. Get Global Leaderboard 
+   GET /leaderboard?limit=10
+   
+   Response(Success):
+   ```
+     {
+        "datalist": [
+            {
+                "user_name": "Rupak",
+                "score": 1600,
+                "rank": 1
+            }
+        ],
+        "Pagination": {
+            "limit": 5
+        }
+    }
+   ```
+
+5. Get User Ranking
+   GET /user-ranking/{userId}
+   ```
+    {
+        "user_name": "jhon",
+        "score": 1600,
+        "rank": 1
+    }  
+   ```
 
 ## Contributing
 
