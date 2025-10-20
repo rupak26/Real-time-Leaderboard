@@ -1,6 +1,8 @@
 package user_handler
 
 import (
+	"log/slog"
+
 	"github.com/rupak26/Real-time-Leaderboard/config"
 	//	"github.com/rupak26/Real-time-Leaderboard/domain"
 	"encoding/json"
@@ -39,6 +41,7 @@ func (h *Handler) Login(w http.ResponseWriter , r *http.Request) {
 
 	user , err := h.svc.Find(reqLogin.Email , reqLogin.Password) 
 	if err != nil {
+		slog.Error(err.Error())
 		http.Error(w , "Invalid Credentials" , http.StatusBadRequest)
 		return 
 	}
@@ -53,6 +56,7 @@ func (h *Handler) Login(w http.ResponseWriter , r *http.Request) {
 	
 		
 	if err != nil {
+		slog.Error(err.Error())
 		utils.WriteResponse(w , http.StatusInternalServerError , "Internal Server Error")
 		return 
 	}
@@ -62,7 +66,7 @@ func (h *Handler) Login(w http.ResponseWriter , r *http.Request) {
 		Message: "Access Token",
 		Data: jwt,
 	}
-
+    slog.Info("Logged In Successfully")
 	utils.WriteResponse(w , http.StatusCreated , response)
 }
 

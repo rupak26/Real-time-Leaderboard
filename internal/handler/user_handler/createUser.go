@@ -1,11 +1,13 @@
 package user_handler
 
 import (
-	"github.com/rupak26/Real-time-Leaderboard/domain"
-	"github.com/rupak26/Real-time-Leaderboard/utils"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"net/http"
+
+	"github.com/rupak26/Real-time-Leaderboard/domain"
+	"github.com/rupak26/Real-time-Leaderboard/utils"
 )
 
 type CreateUserReq struct {
@@ -13,6 +15,7 @@ type CreateUserReq struct {
 	Email string        `json:"email"`
 	Password string     `json:"password"`
 }
+
 
 func (h *Handler) CreateUser(w http.ResponseWriter , r *http.Request) {
 	
@@ -33,9 +36,10 @@ func (h *Handler) CreateUser(w http.ResponseWriter , r *http.Request) {
 	})
 	
 	if err != nil {
+		slog.Error(err.Error())
 		http.Error(w , "Internal Server Error" , http.StatusInternalServerError)
 		return
 	}
-	
+	slog.Info("User Created")
 	utils.WriteResponse(w , http.StatusCreated , createUser)
 }

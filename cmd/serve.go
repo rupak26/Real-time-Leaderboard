@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-
 	"github.com/rupak26/Real-time-Leaderboard/config"
 	"github.com/rupak26/Real-time-Leaderboard/infra/db"
 	"github.com/rupak26/Real-time-Leaderboard/internal/handler/laderbord_handler"
@@ -15,6 +14,11 @@ import (
 	"github.com/rupak26/Real-time-Leaderboard/internal/handler"
 )
 
+
+// @title Real-time Leaderboard API
+// @version 1.0
+// @description API for managing leaderboard and users
+// @host localhost:8080
 func Server() {
 	cnf := config.GetConfig() 
 

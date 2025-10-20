@@ -5,7 +5,8 @@ import (
 
 	"github.com/rupak26/Real-time-Leaderboard/internal/handler/laderbord_handler"
 	"github.com/rupak26/Real-time-Leaderboard/internal/handler/user_handler"
-
+    httpSwagger "github.com/swaggo/http-swagger"
+	_"github.com/rupak26/Real-time-Leaderboard/docs"
 	"github.com/rupak26/Real-time-Leaderboard/internal/middleware"
 	"fmt"
 	"net/http"
@@ -36,11 +37,11 @@ func (server *Server) Start() {
 
 	mux := http.NewServeMux() 
 
-
+    mux.Handle("/swagger/", httpSwagger.WrapHandler)
 	server.laderbordHandler.RegisterRouters(mux , manager)
 	server.userHandler.RegisterRouters(mux , manager)
-    //replacement 
-	
+    
+	//replacement 
 	//mux.Handle("GET /users" ,middleware.Logger(http.HandlerFunc(handlers.GetUser)))
 	//mux.Handle("GET /users/{id}",middleware.Logger(http.HandlerFunc(handlers.GetUserById)))
 	//mux.Handle("POST /users" ,middleware.Logger(http.HandlerFunc(handlers.CreateUser)))

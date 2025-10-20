@@ -1,8 +1,10 @@
 package db
 
 import (
-	"github.com/rupak26/Real-time-Leaderboard/config"
 	"fmt"
+	"log/slog"
+
+	"github.com/rupak26/Real-time-Leaderboard/config"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -27,7 +29,9 @@ func NewConnection(cnf *config.DBConfig) (*sqlx.DB , error) {
     
 	if err != nil {
 		fmt.Println(err) 
+		slog.Error(err.Error())
 		return nil , err
 	}
+	slog.Info("Database Started Successfully")
 	return db , nil
 }
