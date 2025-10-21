@@ -6,6 +6,6 @@ filebeat.inputs:
     json.keys_under_root: true
     json.add_error_key: true
     json.message_key: msg
-
+logging.to_files: false
 output.logstash:
   hosts: ["logstash:5044"]
