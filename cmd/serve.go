@@ -44,7 +44,7 @@ func Server() {
 	middleware := middleware.NewMiddleware(cnf)
 	
     laderBordHandler := laderbord_handler.NewHandler(middleware , laderSvc)
-	userHandler := user_handler.NewHandler(usrSvc)
+	userHandler := user_handler.NewHandler(middleware,usrSvc)
 
     server := handler.NewServer(cnf , laderBordHandler , userHandler)
 	server.Start()

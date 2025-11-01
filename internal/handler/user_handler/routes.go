@@ -10,18 +10,21 @@ func (h *Handler) RegisterRouters(mux *http.ServeMux , manager *middleware.Manag
 		"GET /users" ,
 		manager.With(
 			http.HandlerFunc(h.GetUser),
+			h.middleware.EnableCORS,
 	    ),
     )
 	mux.Handle(
-		"POST /users" ,
+		"POST /users/register" ,
 		manager.With(
 			http.HandlerFunc(h.CreateUser),
+			h.middleware.EnableCORS,
 	    ),
 	)
 	mux.Handle(
 		"POST /users/login" ,
 		manager.With(
 			http.HandlerFunc(h.Login),
+			h.middleware.EnableCORS,
 	    ),
 	)
 }

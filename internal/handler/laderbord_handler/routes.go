@@ -11,6 +11,7 @@ func (h *Handler) RegisterRouters(mux *http.ServeMux , manager *middleware.Manag
 		manager.With(
 			http.HandlerFunc(h.CreateLaderScr),
 			h.middleware.Authorization,
+			h.middleware.EnableCORS,
 	    ),
 	)
 	mux.Handle(
@@ -18,6 +19,7 @@ func (h *Handler) RegisterRouters(mux *http.ServeMux , manager *middleware.Manag
 		manager.With(
 			http.HandlerFunc(h.GetLaderScrList),
 			h.middleware.Authorization,
+			h.middleware.EnableCORS,
 	    ),
 	)
 	mux.Handle(
@@ -25,6 +27,7 @@ func (h *Handler) RegisterRouters(mux *http.ServeMux , manager *middleware.Manag
 		manager.With(
 			http.HandlerFunc(h.GetIndividualLaderScr),
 			h.middleware.Authorization,
+			h.middleware.EnableCORS,
 	    ),
 	)
 }
