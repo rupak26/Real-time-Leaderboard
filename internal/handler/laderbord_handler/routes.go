@@ -6,6 +6,10 @@ import (
 )
 
 func (h *Handler) RegisterRouters(mux *http.ServeMux , manager *middleware.Manager) {
+	mux.Handle("OPTIONS /submit-score", http.HandlerFunc(h.handleOptions))
+    mux.Handle("OPTIONS /leaderboard", http.HandlerFunc(h.handleOptions))
+    mux.Handle("OPTIONS /user-ranking/{id}", http.HandlerFunc(h.handleOptions))
+
 	mux.Handle(
 		"POST /submit-score" ,
 		manager.With(
@@ -30,4 +34,10 @@ func (h *Handler) RegisterRouters(mux *http.ServeMux , manager *middleware.Manag
 			h.middleware.EnableCORS,
 	    ),
 	)
+}
+func (h *Handler) handleOptions(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+    w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    w.WriteHeader(http.StatusOK)
 }

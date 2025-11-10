@@ -62,12 +62,12 @@ func (h *Handler) Login(w http.ResponseWriter , r *http.Request) {
 	}
 	
 	response := ApiResponse {
-		Status: 201,
-		Message: "Access Token",
+		Status: 200,
+		Message: "Logged in Successfully",
 		Data: jwt,
 	}
     slog.Info("Logged In Successfully")
-	utils.WriteResponse(w , http.StatusCreated , response)
+	utils.WriteResponse(w , http.StatusOK , response)
 }
 
 

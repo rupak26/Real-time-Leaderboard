@@ -15,6 +15,9 @@ type CreateUserReq struct {
 	Email string        `json:"email"`
 	Password string     `json:"password"`
 }
+type ResponseBody struct {
+	Data    interface{} `json:"data,omitempty"`
+}
 
 
 func (h *Handler) CreateUser(w http.ResponseWriter , r *http.Request) {
@@ -41,5 +44,12 @@ func (h *Handler) CreateUser(w http.ResponseWriter , r *http.Request) {
 		return
 	}
 	slog.Info("User Created")
-	utils.WriteResponse(w , http.StatusCreated , createUser)
+	
+	api_response := ApiResponse {
+		Status: 201,
+		Message: "User Created Successfully",
+        Data: createUser,
+	}
+
+	utils.WriteResponse(w , http.StatusCreated , api_response)
 }
